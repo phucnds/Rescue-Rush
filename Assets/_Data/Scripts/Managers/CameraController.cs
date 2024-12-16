@@ -35,6 +35,9 @@ public class CameraController : MonoBehaviour, IGameStateListener
     {
         switch (gameState)
         {
+            case GameState.TRAINING:
+                ShowCam(camCM1);
+                break;
 
             case GameState.INTRO:
                 ShowCam(camFollow);

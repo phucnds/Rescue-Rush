@@ -1,20 +1,25 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour, IGameStateListener
+public class UIManager : Singleton<UIManager>, IGameStateListener
 {
     [SerializeField] private GameObject preparePanel;
     [SerializeField] private GameObject gamePanel;
     [SerializeField] private GameObject phaseCompletePanel;
+    [SerializeField] private GameObject trainingPanel;
 
     private List<GameObject> panels = new List<GameObject>();
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         panels.AddRange(new GameObject[] {
             preparePanel,
             gamePanel,
-            phaseCompletePanel
+            phaseCompletePanel,
+            trainingPanel
         });
     }
 
@@ -31,6 +36,10 @@ public class UIManager : MonoBehaviour, IGameStateListener
 
             case GameState.PHASECOMPLETE:
                 ShowPanel(phaseCompletePanel);
+                break;
+
+            case GameState.TRAINING:
+                ShowPanel(trainingPanel);
                 break;
         }
     }

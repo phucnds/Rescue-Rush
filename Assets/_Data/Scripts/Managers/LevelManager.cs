@@ -5,8 +5,6 @@ using UnityEngine.Playables;
 
 public class LevelManager : Singleton<LevelManager>, IGameStateListener
 {
-
-
     [Header("Roads")]
     [SerializeField] private GameObject roads;
     [field: SerializeField] public Vector3 endPointPhase1 { get; private set; } = new Vector3(50, 0, 400);
@@ -42,13 +40,6 @@ public class LevelManager : Singleton<LevelManager>, IGameStateListener
 
     public Action<List<Cat>> OnSetPositionCat;
 
-    private void Start()
-    {
-        Intialize();
-
-
-    }
-
     public void OnRescueComplete()
     {
         remainCat--;
@@ -64,6 +55,10 @@ public class LevelManager : Singleton<LevelManager>, IGameStateListener
     {
         switch (gameState)
         {
+            case GameState.INTRO:
+                Intialize();
+                break;
+
             case GameState.GAME:
                 StartGame();
                 OnSetPositionCat?.Invoke(lstCatThisLevel);

@@ -8,7 +8,8 @@ public class GameManager : Singleton<GameManager>
     {
         Application.targetFrameRate = 60;
 
-        SetGameState(GameState.INTRO);
+        // SetGameState(GameState.INTRO);
+        SetGameState(GameState.TRAINING);
     }
 
     public void SetGameState(GameState state)

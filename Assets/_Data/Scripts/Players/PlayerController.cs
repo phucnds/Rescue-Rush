@@ -4,21 +4,23 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
     [SerializeField] private MobileJoystick joystick;
-    [SerializeField] private float moveSpeed = 10f;
 
     private CharacterController characterController;
     private PlayerAnimator anim;
+    private PlayerStats playerStats;
 
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
         anim = GetComponent<PlayerAnimator>();
+        playerStats = GetComponent<PlayerStats>();
     }
+
 
     private void FixedUpdate()
     {
-        Debug.Log(GetCurrentSpeed());
 
         if (pointsList != null)
         {
@@ -28,7 +30,7 @@ public class PlayerController : MonoBehaviour
         {
             Movements(destination - transform.position);
 
-            if (Vector3.Distance(transform.position, destination) < moveSpeed * Time.deltaTime && onComplete != null)
+            if (Vector3.Distance(transform.position, destination) < GetMaxSpeed() * Time.deltaTime && onComplete != null)
             {
                 isFollow = false;
                 onComplete?.Invoke();
@@ -39,18 +41,16 @@ public class PlayerController : MonoBehaviour
             Vector3 correctDirVector = GetCorrectDirVector(joystick.GetMoveVector());
             Movements(correctDirVector);
         }
-
-
     }
 
     public float GetCurrentSpeed()
     {
-        return joystick.GetMoveVector().magnitude * moveSpeed;
+        return characterController.velocity.magnitude * GetMaxSpeed();
     }
 
     public float GetMaxSpeed()
     {
-        return moveSpeed;
+        return playerStats.GetValueStat(Stat.SPEED);
     }
 
     public void MoveTo(Vector3 des, Action onCompleted = null)
@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
     {
         anim.ManageAnimations(dirVector);
 
-        Vector3 moveVector = dirVector.normalized * moveSpeed * Time.fixedDeltaTime;
+        Vector3 moveVector = dirVector.normalized * GetMaxSpeed() * Time.fixedDeltaTime;
         characterController.Move(moveVector);
     }
 
@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
         if (nextPointIndex < pointsList.Length)
         {
             float distanceToNextPoint = Vector3.Distance(transform.position, pointsList[nextPointIndex]);
-            if (distanceToNextPoint < moveSpeed * Time.deltaTime)
+            if (distanceToNextPoint < GetMaxSpeed() * Time.deltaTime)
             {
                 nextPointIndex++;
                 if (nextPointIndex >= pointsList.Length)
