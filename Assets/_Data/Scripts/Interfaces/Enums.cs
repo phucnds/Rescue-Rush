@@ -1,5 +1,6 @@
 public enum GameState
 {
+    NONE,
     TRAINING,
     INTRO,
     PREPARE,
@@ -8,6 +9,4 @@ public enum GameState
     PHASECOMPLETE,
     OUTTRO,
     STAGECOMPLETE,
-
-
 }

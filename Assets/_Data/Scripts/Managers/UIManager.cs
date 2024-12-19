@@ -9,7 +9,6 @@ public class UIManager : Singleton<UIManager>, IGameStateListener
     [SerializeField] private GameObject gamePanel;
     [SerializeField] private GameObject introPanel;
     [SerializeField] private GameObject phaseCompletePanel;
-    [SerializeField] private GameObject trainingPanel;
 
     [SerializeField] private Popup popupCompleted;
     [SerializeField] private Popup popupGameOver;
@@ -24,7 +23,6 @@ public class UIManager : Singleton<UIManager>, IGameStateListener
             preparePanel,
             gamePanel,
             phaseCompletePanel,
-            trainingPanel,
             introPanel
         });
 
@@ -49,10 +47,6 @@ public class UIManager : Singleton<UIManager>, IGameStateListener
 
             case GameState.PHASECOMPLETE:
                 ShowPanel(phaseCompletePanel);
-                break;
-
-            case GameState.TRAINING:
-                ShowPanel(trainingPanel);
                 break;
         }
     }

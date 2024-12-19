@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    [SerializeField] private GameState gameState = GameState.NONE;
+
     private void Start()
     {
-        SetGameState(GameState.INTRO);
+        SetGameState(gameState);
     }
 
     public void SetGameState(GameState state)
