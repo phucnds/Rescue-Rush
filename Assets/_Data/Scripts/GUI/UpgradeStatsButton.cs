@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,29 +13,31 @@ public class UpgradeStatsButton : MonoBehaviour
 
     [field: SerializeField] public Button Button { get; private set; }
 
-    public void Setup(StatData statData)
+    public void Setup(StatData statData, PlayerStats playerStats)
     {
-        UpdateVisuals(statData);
+        UpdateVisuals(statData, playerStats);
 
+        Button.onClick.RemoveAllListeners();
         Button.onClick.AddListener(() =>
         {
-            float cost = Player.Instance.PlayerStats.GetCostStatNextLV(statData.Stat);
-            Player.Instance.PlayerStats.UpgradeStat(statData.Stat);
+            float cost = playerStats.GetCostStatNextLV(statData.Stat);
+            if (!CurrencyManager.Instance.HasEnoughCurrency(cost)) return;
+            playerStats.UpgradeStat(statData.Stat);
             CurrencyManager.Instance.UseCurrency(cost);
-            UpdateVisuals(statData);
         });
     }
 
-    private void UpdateVisuals(StatData statData)
+    private void UpdateVisuals(StatData statData, PlayerStats playerStats)
     {
         txtName.text = statData.Stat.ToString();
         icon.sprite = statData.Icon;
-        txtValue.text = Player.Instance.PlayerStats.GetValueStat(statData.Stat).ToString();
+        txtValue.text = playerStats.GetValueStat(statData.Stat).ToString();
 
-        float cost = Player.Instance.PlayerStats.GetCostStatNextLV(statData.Stat);
+        float cost = playerStats.GetCostStatNextLV(statData.Stat);
         txtCostNextLv.text = cost.ToString();
 
         Button.interactable = CurrencyManager.Instance.HasEnoughCurrency(cost);
+
     }
 
 

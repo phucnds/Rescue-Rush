@@ -15,12 +15,6 @@ public class PreloadGame : MonoBehaviour
         count = 3;
         txtNum.gameObject.SetActive(true);
         StartCoroutine(CountDown());
-
-        tapToSpeedUp.onClick.AddListener(() =>
-        {
-
-
-        });
     }
 
 

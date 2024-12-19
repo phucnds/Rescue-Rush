@@ -21,7 +21,7 @@ public class PlayerCarry : MonoBehaviour
         cat.transform.localPosition = new Vector3(0, (lstCat.Count - 1) * 2 + offset, 0);
         cat.transform.forward = transform.forward;
 
-        LevelManager.Instance.OnRescueComplete();
+        LevelManager.Instance.OnRescueComplete(cat);
         // cat.gameObject.SetActive(false);
     }
 }

@@ -9,8 +9,6 @@ namespace Saving
 {
     public class SaveSystem : Singleton<SaveSystem>
     {
-        public static SaveSystem instance;
-
         private string dataPath;
 
         public static GameData GameData { get; private set; }
@@ -21,7 +19,7 @@ namespace Saving
 
 
 #if UNITY_EDITOR
-            dataPath = Application.dataPath + "_Data/Storage/GameData.txt";
+            dataPath = Application.dataPath + "/_Data/Storage/GameData.txt";
 #else
         dataPath = Application.persistentDataPath + "/GameData.txt";
 #endif
@@ -73,7 +71,7 @@ namespace Saving
 
         private static void Save()
         {
-            instance.LocalSave();
+            Instance.LocalSave();
         }
 
         public static void Save(object sender, string key, object data)

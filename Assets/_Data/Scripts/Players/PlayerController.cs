@@ -2,9 +2,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IGameStateListener
 {
-
     [SerializeField] private MobileJoystick joystick;
 
     private CharacterController characterController;
@@ -18,34 +17,14 @@ public class PlayerController : MonoBehaviour
         playerStats = GetComponent<PlayerStats>();
     }
 
-
     private void FixedUpdate()
     {
-
-        if (pointsList != null)
-        {
-            FollowTarget();
-        }
-        else if (isFollow)
-        {
-            Movements(destination - transform.position);
-
-            if (Vector3.Distance(transform.position, destination) < GetMaxSpeed() * Time.deltaTime && onComplete != null)
-            {
-                isFollow = false;
-                onComplete?.Invoke();
-            }
-        }
-        else
-        {
-            Vector3 correctDirVector = GetCorrectDirVector(joystick.GetMoveVector());
-            Movements(correctDirVector);
-        }
+        // HandleState();
     }
 
     public float GetCurrentSpeed()
     {
-        return characterController.velocity.magnitude * GetMaxSpeed();
+        return characterController.velocity.magnitude;
     }
 
     public float GetMaxSpeed()
@@ -53,19 +32,25 @@ public class PlayerController : MonoBehaviour
         return playerStats.GetValueStat(Stat.SPEED);
     }
 
-    public void MoveTo(Vector3 des, Action onCompleted = null)
+    public void Follow(Vector3 des, Action onCompleted = null)
     {
         destination = des;
         this.onComplete = onCompleted;
         isFollow = true;
     }
 
-    private void Movements(Vector3 dirVector)
+    public void Movement(Vector3 dirVector)
     {
-        anim.ManageAnimations(dirVector);
+        // anim.ManageAnimations(dirVector);
 
-        Vector3 moveVector = dirVector.normalized * GetMaxSpeed() * Time.fixedDeltaTime;
+        Vector3 moveVector = dirVector * GetMaxSpeed() * Time.fixedDeltaTime;
         characterController.Move(moveVector);
+
+    }
+
+    public void ToggleTrainingState(bool flag)
+    {
+        isTraning = flag;
     }
 
     private Vector3 GetCorrectDirVector(Vector3 dir)
@@ -76,6 +61,38 @@ public class PlayerController : MonoBehaviour
         return correctDirVector;
     }
 
+    private void HandleState()
+    {
+        if (pointsList != null)
+        {
+            FollowTarget();
+        }
+        else if (isFollow)
+        {
+            Movement(destination - transform.position);
+            if (Vector3.Distance(transform.position, destination) < GetMaxSpeed() * Time.deltaTime && onComplete != null)
+            {
+                isFollow = false;
+                onComplete?.Invoke();
+            }
+        }
+
+        else if (isTraning)
+        {
+            if (transform.position.z > 50000)
+            {
+                transform.position = new Vector3(transform.position.x, 0, 0);
+            }
+        }
+        else
+        {
+            Vector3 correctDirVector = GetCorrectDirVector(joystick.GetMoveVector());
+            Movement(correctDirVector);
+
+            Debug.Log("das");
+        }
+    }
+
 
 
     //=======================FOLLOW TARGETS========================================
@@ -84,6 +101,7 @@ public class PlayerController : MonoBehaviour
     private Vector3[] pointsList;
     private int nextPointIndex;
     private bool isFollow;
+    private bool isTraning;
     private Vector3 destination;
 
     private Action onComplete;
@@ -111,7 +129,7 @@ public class PlayerController : MonoBehaviour
         }
 
         Vector3 moveVector = pointsList[nextPointIndex] - transform.position;
-        Movements(moveVector);
+        Movement(moveVector);
 
     }
 
@@ -129,6 +147,16 @@ public class PlayerController : MonoBehaviour
     public float GetPosZ()
     {
         return transform.position.z;
+    }
+
+    public void GameStateChangeCallback(GameState gameState)
+    {
+        switch (gameState)
+        {
+            case GameState.TRAINING:
+                isTraning = true;
+                break;
+        }
     }
 
     //==================================================================================

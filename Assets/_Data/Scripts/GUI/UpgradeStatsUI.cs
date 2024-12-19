@@ -1,30 +1,43 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpgradeStatsUI : MonoBehaviour
+public class UpgradeStatsUI : MonoBehaviour, IPlayerStatsDepnedency
 {
     [SerializeField] private UpgradeStatsButton buttonStatPrefab;
 
+    private PlayerStats playerStats;
+
     private void Start()
     {
-        UpdateVisual();
+        CurrencyManager.onUpdated += CurrencyManager_onUpdated;
     }
 
-    private void UpdateVisual()
+    private void OnDestroy()
     {
-        foreach (Transform tr in transform)
+        CurrencyManager.onUpdated -= CurrencyManager_onUpdated;
+    }
+
+    private void CurrencyManager_onUpdated()
+    {
+        UpdateVisual(playerStats);
+    }
+
+    private void UpdateVisual(PlayerStats playerStats)
+    {
+
+        StatData[] stats = ResourceManager.Instance.PlayerStatsData.stats;
+
+        for (int i = 0; i < stats.Length; i++)
         {
-            Destroy(tr.gameObject);
+            UpgradeStatsButton statsButton = transform.GetChild(i).GetComponent<UpgradeStatsButton>();
+            statsButton.Setup(stats[i], playerStats);
         }
+    }
 
-        Dictionary<Stat, StatData> stats = ResourceManager.Instance.PlayerStatsData.GetListStat();
-
-        Debug.Log(stats.Keys.Count);
-
-        foreach (Stat stat in stats.Keys)
-        {
-            UpgradeStatsButton statsButton = Instantiate(buttonStatPrefab, transform);
-            statsButton.Setup(stats[stat]);
-        }
+    public void UpdateStats(PlayerStats playerStats)
+    {
+        this.playerStats = playerStats;
+        UpdateVisual(playerStats);
     }
 }

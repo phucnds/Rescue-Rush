@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/_Data/Scenes/Init.unity
     guid: c0d036ed5a1498f408445dc7a00ad93b
   - enabled: 1
+    path: Assets/_Data/Scenes/Training.unity
+    guid: a20565efc2010b44188ee8aa13522add
+  - enabled: 1
     path: Assets/_Data/Scenes/Game.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:

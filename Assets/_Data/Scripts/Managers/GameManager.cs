@@ -6,10 +6,7 @@ public class GameManager : Singleton<GameManager>
 {
     private void Start()
     {
-        Application.targetFrameRate = 60;
-
-        // SetGameState(GameState.INTRO);
-        SetGameState(GameState.TRAINING);
+        SetGameState(GameState.INTRO);
     }
 
     public void SetGameState(GameState state)
@@ -23,4 +20,5 @@ public class GameManager : Singleton<GameManager>
     }
 
     public void StartGame() => SetGameState(GameState.GAME);
+
 }

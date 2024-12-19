@@ -4,14 +4,14 @@ using UnityEngine.UI;
 
 public class DisplayPosition : MonoBehaviour
 {
-    [SerializeField] PlayerController player;
+    [SerializeField] PlayerMovement player;
 
     [SerializeField] private Slider sliderPlayer;
     [SerializeField] private Slider sliderTsunami;
     [SerializeField] private RectTransform rect;
     [SerializeField] private Image icCat;
 
-    private List<Cat> cats;
+    private bool isActive = true;
 
     private void Start()
     {
@@ -25,6 +25,7 @@ public class DisplayPosition : MonoBehaviour
 
     private void Update()
     {
+        if (!isActive) return;
         UpdateUI();
     }
 
@@ -41,17 +42,24 @@ public class DisplayPosition : MonoBehaviour
 
         sliderTsunami.value = Mathf.Max(tPosZ, 0) / lengthRoad;
 
+        if (rect.transform.childCount == 0)
+        {
+            SetPosCat(LevelManager.Instance.LstCatThisLevel());
+        }
 
+        if (tPosZ >= PosZ)
+        {
+            GameManager.Instance.SetGameState(GameState.GAMEOVER);
+            isActive = false;
+        }
     }
 
     private void SetPosCat(List<Cat> lst)
     {
-        cats = lst;
-
         float l = rect.rect.xMax - rect.rect.x;
         float lengthRoad = LevelManager.Instance.endPointPhase1.z;
 
-        foreach (Cat cat in cats)
+        foreach (Cat cat in lst)
         {
             float posZ = cat.transform.position.z;
             float x = posZ / lengthRoad * l;

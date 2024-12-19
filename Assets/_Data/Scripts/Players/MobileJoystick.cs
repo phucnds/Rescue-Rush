@@ -20,7 +20,6 @@ public class MobileJoystick : MonoBehaviour
     void Start()
     {
         hWidth = joystickOutline.rect.xMax;
-        Debug.Log(hWidth);
         HideJoystick();
     }
 
@@ -79,9 +78,7 @@ public class MobileJoystick : MonoBehaviour
 
     public Vector3 GetMoveVector()
     {
-        float canvasScale = GetComponentInParent<Canvas>().GetComponent<RectTransform>().localScale.x;
-
-        // Debug.Log(move / hWidth);
-        return move / hWidth;
+        // float canvasScale = GetComponentInParent<Canvas>().GetComponent<RectTransform>().localScale.x;
+        return move / Mathf.Max(0, hWidth);
     }
 }

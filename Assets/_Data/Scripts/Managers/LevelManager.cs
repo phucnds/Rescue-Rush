@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
 
 public class LevelManager : Singleton<LevelManager>, IGameStateListener
 {
@@ -26,12 +25,13 @@ public class LevelManager : Singleton<LevelManager>, IGameStateListener
     [SerializeField] private Vector3[] arrPos;
     [SerializeField] private int remainCat = 0;
     private List<Cat> lstCatThisLevel = new List<Cat>();
+    private List<Cat> remainList = new List<Cat>();
 
     [Space(5)]
     [NaughtyAttributes.HorizontalLine]
 
     [Header("Player")]
-    [SerializeField] private PlayerController player;
+    [SerializeField] private PlayerMovement player;
     [Space(5)]
     [NaughtyAttributes.HorizontalLine]
 
@@ -40,13 +40,20 @@ public class LevelManager : Singleton<LevelManager>, IGameStateListener
 
     public Action<List<Cat>> OnSetPositionCat;
 
-    public void OnRescueComplete()
+    private void Start()
+    {
+        player.SetDebug(DEBUG);
+    }
+
+    public void OnRescueComplete(Cat cat)
     {
         remainCat--;
         if (remainCat <= 0)
         {
             GameManager.Instance.SetGameState(GameState.PHASECOMPLETE);
         }
+
+        remainList.Remove(cat);
 
         Debug.Log("rescue: " + remainCat);
     }
@@ -68,8 +75,14 @@ public class LevelManager : Singleton<LevelManager>, IGameStateListener
                 PlayerGotoGoal();
                 break;
 
+            case GameState.GAMEOVER:
+                StopTsunami();
+                UIManager.Instance.ShowPopupGameOver();
+                break;
+
             case GameState.STAGECOMPLETE:
                 StopTsunami();
+                UIManager.Instance.ShowPopupCompleted();
                 break;
         }
     }
@@ -114,8 +127,11 @@ public class LevelManager : Singleton<LevelManager>, IGameStateListener
             lstCatThisLevel.Add(cat);
             remainCat++;
         }
+
+        remainList = lstCatThisLevel;
     }
 
+  
 
 
     private void StartGame()
@@ -132,17 +148,25 @@ public class LevelManager : Singleton<LevelManager>, IGameStateListener
 
     private void PlayerGotoGoal()
     {
-
-
-        player.MoveTo(endPointPhase1, () =>
+        player.Follow(endPointPhase1, () =>
         {
             GameManager.Instance.SetGameState(GameState.OUTTRO);
 
-            player.MoveTo(endPointPhase2, () =>
+            player.Follow(endPointPhase2, () =>
             {
 
             });
         });
+    }
+
+    public List<Cat> RemainCatList()
+    {
+        return remainList;
+    }
+
+    public List<Cat> LstCatThisLevel()
+    {
+        return lstCatThisLevel;
     }
 
 

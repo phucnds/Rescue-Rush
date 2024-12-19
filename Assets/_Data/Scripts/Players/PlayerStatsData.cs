@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerStatsData", menuName = "PlayerStatsData", order = 0)]
 public class PlayerStatsData : ScriptableObject
 {
-    [SerializeField] private StatData[] stats;
+    [field: SerializeField] public StatData[] stats { get; private set; }
 
     private Dictionary<Stat, StatData> lookupStats;
 
@@ -42,7 +42,6 @@ public class PlayerStatsData : ScriptableObject
         return lookupStats;
     }
 }
-
 
 public enum Stat
 {

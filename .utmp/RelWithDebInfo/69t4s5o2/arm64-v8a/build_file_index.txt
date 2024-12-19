@@ -1,0 +1,2 @@
+C:\MyDocument\WorkPlace\Unity\Rescue-Rush\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\MyDocument\WorkPlace\Unity\Rescue-Rush\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

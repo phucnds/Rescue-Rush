@@ -2,16 +2,13 @@ using System;
 using Saving;
 using UnityEngine;
 
-public class CurrencyManager : Singleton<CurrencyManager>
+public class CurrencyManager : Singleton<CurrencyManager>,IWantToBeSaved
 {
     [field: SerializeField] public float Currency { get; private set; }
+    [SerializeField] private float initCurrency = 100;
+
 
     const string CurrencyKey = "Currency";
-
-    private void Start()
-    {
-        AddCurrency(100);
-    }
 
     public static Action onUpdated;
 
@@ -42,13 +39,26 @@ public class CurrencyManager : Singleton<CurrencyManager>
     public bool HasEnoughCurrency(float price) => Currency >= price;
     public void UseCurrency(float price) => AddCurrency(-price);
 
+    [NaughtyAttributes.Button]
+    private void Add50000()
+    {
+        AddCurrency(50000);
+    }
+
     public void Load()
     {
-
+        if(SaveSystem.TryLoad(this, CurrencyKey, out object currencyValue))
+        {
+            AddCurrency((float)currencyValue);
+        }
+        else
+        {
+            AddCurrency(initCurrency);
+        }
     }
 
     public void Save()
     {
-
+        SaveSystem.Save(this,CurrencyKey, Currency);
     }
 }

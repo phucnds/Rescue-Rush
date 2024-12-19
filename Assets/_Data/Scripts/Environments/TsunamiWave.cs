@@ -13,4 +13,14 @@ public class TsunamiWave : MonoBehaviour
     {
         moveSpeed = speed;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // if (other.TryGetComponent<Player>(out Player player))
+        // {
+        //     GameManager.Instance.SetGameState(GameState.GAMEOVER);
+
+        //     Debug.Log("Player");
+        // }
+    }
 }

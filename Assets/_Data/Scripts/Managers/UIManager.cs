@@ -1,13 +1,18 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>, IGameStateListener
 {
     [SerializeField] private GameObject preparePanel;
     [SerializeField] private GameObject gamePanel;
+    [SerializeField] private GameObject introPanel;
     [SerializeField] private GameObject phaseCompletePanel;
     [SerializeField] private GameObject trainingPanel;
+
+    [SerializeField] private Popup popupCompleted;
+    [SerializeField] private Popup popupGameOver;
 
     private List<GameObject> panels = new List<GameObject>();
 
@@ -19,14 +24,22 @@ public class UIManager : Singleton<UIManager>, IGameStateListener
             preparePanel,
             gamePanel,
             phaseCompletePanel,
-            trainingPanel
+            trainingPanel,
+            introPanel
         });
+
+        ShowPanel(null);
+
     }
 
     public void GameStateChangeCallback(GameState gameState)
     {
         switch (gameState)
         {
+
+            case GameState.INTRO:
+                ShowPanel(introPanel);
+                break;
             case GameState.PREPARE:
                 ShowPanel(preparePanel);
                 break;
@@ -51,4 +64,9 @@ public class UIManager : Singleton<UIManager>, IGameStateListener
             item.SetActive(item == panel);
         }
     }
+
+    public void ShowPopupCompleted() => popupCompleted.Show();
+    public void ShowPopupGameOver() => popupGameOver.Show();
+
+
 }
