@@ -51,6 +51,7 @@ MonoBehaviour:
   - {fileID: 2241947687273806082, guid: 08932b7ef6e4fc84fbd47e094634b483, type: 3}
   - {fileID: 636287550504267556, guid: d60c5db464d558b40b3c875d7bb1bb32, type: 3}
   roadP2Prefab: {fileID: 6603986011269831656, guid: 86c6580be0754f74c883445fce040cf4, type: 3}
+  roadCornerPrefab: {fileID: 6157534062128088416, guid: a06f73368cced1842bac71b84a868af3, type: 3}
   amountObstacle: 3
   tsunamiWavePrefab: {fileID: 5798085671838484845, guid: 598f3618e1288574cb8df49c94762dcb, type: 3}
   tsunaminPos: {x: 50, y: 0, z: -150}

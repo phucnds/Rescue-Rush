@@ -19,7 +19,6 @@ public class LevelManager : Singleton<LevelManager>, IGameStateListener, IWantTo
     [Header("Player")]
     [SerializeField] private PlayerMovement player;
 
-    private List<Cat> lstCatThisLevel = new List<Cat>();
     private List<Cat> remainList = new List<Cat>();
     private int remainAmount = 0;
 
@@ -48,7 +47,7 @@ public class LevelManager : Singleton<LevelManager>, IGameStateListener, IWantTo
 
             case GameState.GAME:
                 StartGame();
-                OnSetPositionCat?.Invoke(lstCatThisLevel);
+                OnSetPositionCat?.Invoke(levelData.GetCats());
                 break;
 
             case GameState.PHASECOMPLETE:
@@ -105,7 +104,7 @@ public class LevelManager : Singleton<LevelManager>, IGameStateListener, IWantTo
 
     public List<Cat> LstCatThisLevel()
     {
-        return lstCatThisLevel;
+        return levelData.GetCats();
     }
 
     public float GetLengthP1() => levelData.GetLengthP1();

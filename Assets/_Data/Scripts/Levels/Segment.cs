@@ -41,7 +41,7 @@ public class Segment : MonoBehaviour
 
         float randX = Random.Range(-w / 2, w / 2);
         float randY = Random.Range(-h / 2, h / 2);
-        Debug.Log($"{w} - {h}");
+        // Debug.Log($"{w} - {h}");
         return new Vector3(randX, 0, randY);
     }
 

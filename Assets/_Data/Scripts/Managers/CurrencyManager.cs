@@ -5,7 +5,7 @@ using UnityEngine;
 public class CurrencyManager : Singleton<CurrencyManager>,IWantToBeSaved
 {
     [field: SerializeField] public float Currency { get; private set; }
-    [SerializeField] private float initCurrency = 100;
+    [SerializeField] private float initCurrency = 1000;
 
 
     const string CurrencyKey = "Currency";

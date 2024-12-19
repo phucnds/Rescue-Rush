@@ -3964,13 +3964,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16732a100a28743479ff1261b0c16877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roads: {fileID: 7389625568558578757, guid: 9fe60075e9ed41044a2a36d15f6e361b, type: 3}
-  <endPointPhase1>k__BackingField: {x: 50, y: 0, z: 400}
-  <endPointPhase2>k__BackingField: {x: 50, y: 0, z: 1400}
-  tsunamiWave: {fileID: 5798085671838484845, guid: 598f3618e1288574cb8df49c94762dcb, type: 3}
-  tsunaminPos: {x: 50, y: 0, z: -150}
-  moveSpeed: 10
-  remainCat: 0
   levelData: {fileID: 1597787534}
   GameLevel: 0
   ListLevelData:
@@ -4005,7 +3998,6 @@ MonoBehaviour:
     AmountObstacle: 4
     TsunamiWaveSpeed: 20
   player: {fileID: 1609376136}
-  environmentParent: {fileID: 525821277}
 --- !u!1 &1332972973
 GameObject:
   m_ObjectHideFlags: 0
@@ -4477,7 +4469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63c4334f7b39c3e4689d70fbaf655247, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: 0
+  gameState: 2
 --- !u!1 &1498261466
 GameObject:
   m_ObjectHideFlags: 0

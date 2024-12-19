@@ -9,6 +9,7 @@ public class Level : MonoBehaviour
 
     [SerializeField] private Segment[] segmentPrefabs;
     [SerializeField] private GameObject roadP2Prefab;
+    [SerializeField] private GameObject roadCornerPrefab;
     [SerializeField] private int amountObstacle;
 
     [SerializeField] private TsunamiWave tsunamiWavePrefab;
@@ -39,9 +40,15 @@ public class Level : MonoBehaviour
     public void BuildLevel()
     {
         Init();
+        
         Clear();
+
+        BuildCorner();
+
         BuildPhase1();
+
         BuildPhase2();
+
         CreateTsunamiWave();
     }
 
@@ -53,6 +60,10 @@ public class Level : MonoBehaviour
         type = Random.Range(0, segmentPrefabs.Length);
     }
 
+    private void BuildCorner()
+    {
+        Instantiate(roadCornerPrefab,transform);
+    }
 
     private void BuildPhase1()
     {

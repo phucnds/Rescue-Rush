@@ -45,6 +45,7 @@ public class DisplayPosition : MonoBehaviour
         if (rect.transform.childCount == 0)
         {
             SetPosCat(LevelManager.Instance.LstCatThisLevel());
+            Debug.Log("set cat");
         }
 
         if (tPosZ >= PosZ)
@@ -56,8 +57,12 @@ public class DisplayPosition : MonoBehaviour
 
     private void SetPosCat(List<Cat> lst)
     {
+        Debug.Log(lst.Count);
+
         float l = rect.rect.xMax - rect.rect.x;
         float lengthRoad = LevelManager.Instance.GetLengthP1();
+
+        Debug.Log(lengthRoad);
 
         foreach (Cat cat in lst)
         {

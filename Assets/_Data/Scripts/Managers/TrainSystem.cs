@@ -33,6 +33,8 @@ public class TrainSystem : MonoBehaviour
 
             string str = flag ? "On" : "Off";
             txtAuto.text = "Auto: " + str;
+
+            SceneLoading.Instance.ToggleTutFocus(false);
         });
 
         playerStamina.StartTraining();
@@ -41,6 +43,7 @@ public class TrainSystem : MonoBehaviour
         {
             SceneLoading.Instance.ActiveLoadingScene();
             SceneManager.LoadScene(2);
+            SceneLoading.Instance.ToggleTutFocus(false);
         });
     }
 

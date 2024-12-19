@@ -1924,7 +1924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ee9849c63d263445b533b5e14145e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapChunkPrefab: {fileID: 8904255098727557415, guid: b4c94ba71c6cea747a81b831f78a7623, type: 3}
+  mapChunkPrefab: {fileID: 2731002345084200755, guid: ee7540b80f12bf445b589c423b5ef961, type: 3}
   mapChunkSize: 400
 --- !u!1 &970192092
 GameObject:
