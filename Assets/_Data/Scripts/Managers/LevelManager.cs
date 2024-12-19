@@ -1,61 +1,41 @@
 using System;
 using System.Collections.Generic;
+using Saving;
 using UnityEngine;
 
-public class LevelManager : Singleton<LevelManager>, IGameStateListener
+public class LevelManager : Singleton<LevelManager>, IGameStateListener, IWantToBeSaved
 {
-    [Header("Roads")]
-    [SerializeField] private GameObject roads;
-    [field: SerializeField] public Vector3 endPointPhase1 { get; private set; } = new Vector3(50, 0, 400);
-    [field: SerializeField] public Vector3 endPointPhase2 { get; private set; } = new Vector3(50, 0, 1400);
-    [Space(5)]
-    [NaughtyAttributes.HorizontalLine]
+    [Header("Level")]
 
-    [Header("Tsunami")]
-    [SerializeField] private TsunamiWave tsunamiWave;
-    [SerializeField] private Vector3 tsunaminPos = new Vector3(50, 0, -150);
-    [SerializeField] private float moveSpeed = 10;
+    const string GameLevelKey = "GameLevel";
 
-    private TsunamiWave tsunami;
-    [Space(5)]
-    [NaughtyAttributes.HorizontalLine]
-
-    [Header("Animals")]
-    [SerializeField] private Cat catPrefab;
-    [SerializeField] private Vector3[] arrPos;
-    [SerializeField] private int remainCat = 0;
-    private List<Cat> lstCatThisLevel = new List<Cat>();
-    private List<Cat> remainList = new List<Cat>();
+    [SerializeField] private Level levelData;
+    [SerializeField] private int GameLevel = 0;
+    [SerializeField] private LevelData[] ListLevelData;
 
     [Space(5)]
     [NaughtyAttributes.HorizontalLine]
 
     [Header("Player")]
     [SerializeField] private PlayerMovement player;
-    [Space(5)]
-    [NaughtyAttributes.HorizontalLine]
 
-    [SerializeField] private Transform environmentParent;
-    [SerializeField] private bool DEBUG;
+    private List<Cat> lstCatThisLevel = new List<Cat>();
+    private List<Cat> remainList = new List<Cat>();
+    private int remainAmount = 0;
 
     public Action<List<Cat>> OnSetPositionCat;
 
-    private void Start()
-    {
-        player.SetDebug(DEBUG);
-    }
-
     public void OnRescueComplete(Cat cat)
     {
-        remainCat--;
-        if (remainCat <= 0)
+        remainAmount--;
+
+        if (remainAmount <= 0)
         {
             GameManager.Instance.SetGameState(GameState.PHASECOMPLETE);
         }
 
         remainList.Remove(cat);
-
-        Debug.Log("rescue: " + remainCat);
+        // Debug.Log("rescue: " + remainAmount);
     }
 
     public void GameStateChangeCallback(GameState gameState)
@@ -83,76 +63,35 @@ public class LevelManager : Singleton<LevelManager>, IGameStateListener
             case GameState.STAGECOMPLETE:
                 StopTsunami();
                 UIManager.Instance.ShowPopupCompleted();
+                SetGameLevel(GameLevel + 1);
                 break;
         }
     }
 
     private void Intialize()
     {
-        CreateRoads();
+        Debug.Log(GameLevel);
 
-        CreateTsunami();
+        LevelData data = ListLevelData[GameLevel];
+        levelData.SetupLevel(data.AmountObstacle, data.TsunamiWaveSpeed);
+        levelData.BuildLevel();
 
-        CreateListCat();
+        remainAmount = levelData.GetCats().Count;
+        remainList = levelData.GetCats();
     }
 
-    private void CreateRoads()
-    {
-        Instantiate(roads, environmentParent);
-    }
+    private void StopTsunami() => levelData.StopTsunamiWave();
 
-    private void CreateTsunami()
-    {
-        tsunami = Instantiate(tsunamiWave, tsunaminPos, Quaternion.identity, environmentParent);
-        tsunami.SetMoveSpeed(0);
-    }
+    public TsunamiWave GetTsunami() => levelData.TsunamiWave;
 
-    private void StopTsunami()
-    {
-        tsunami.SetMoveSpeed(0);
-    }
-
-    public TsunamiWave GetTsunami()
-    {
-        return tsunami;
-    }
-
-    private void CreateListCat()
-    {
-        remainCat = 0;
-
-        foreach (Vector3 pos in arrPos)
-        {
-            Cat cat = Instantiate(catPrefab, pos, Quaternion.identity, environmentParent);
-            lstCatThisLevel.Add(cat);
-            remainCat++;
-        }
-
-        remainList = lstCatThisLevel;
-    }
-
-  
-
-
-    private void StartGame()
-    {
-        tsunami.SetMoveSpeed(moveSpeed);
-
-        if (DEBUG)
-        {
-            player.StarMovement(arrPos);
-        }
-    }
-
-
+    private void StartGame() => levelData.StartTsunamiWave();
 
     private void PlayerGotoGoal()
     {
-        player.Follow(endPointPhase1, () =>
+        player.Follow(levelData.EndPointPhase1, () =>
         {
             GameManager.Instance.SetGameState(GameState.OUTTRO);
-
-            player.Follow(endPointPhase2, () =>
+            player.Follow(levelData.EndPointPhase2, () =>
             {
 
             });
@@ -169,6 +108,29 @@ public class LevelManager : Singleton<LevelManager>, IGameStateListener
         return lstCatThisLevel;
     }
 
+    public float GetLengthP1() => levelData.GetLengthP1();
 
+    public void Load()
+    {
+        if (SaveSystem.TryLoad(this, GameLevelKey, out object gameLvValue))
+        {
+            SetGameLevel((int)gameLvValue);
+        }
+        else
+        {
+            SetGameLevel(0);
+        }
+    }
 
+    public void SetGameLevel(int lv)
+    {
+        GameLevel = lv;
+        GameLevel = Mathf.Clamp(GameLevel, 0, ListLevelData.Length - 1);
+        Save();
+    }
+
+    public void Save()
+    {
+        SaveSystem.Save(this, GameLevelKey, GameLevel);
+    }
 }

@@ -6,7 +6,7 @@
 		},
 		"CurrencyManager_Currency": {
 			"dataType": "Saving.SerializableObject`1[[System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
-			"value": "{\r\n\t\"myObject\": 18268.0\r\n}"
+			"value": "{\r\n\t\"myObject\": 18768.0\r\n}"
 		}
 	}
 }

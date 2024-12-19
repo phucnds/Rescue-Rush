@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TsunamiWave : MonoBehaviour
 {
-    [SerializeField] float moveSpeed = 10f;
+    private float moveSpeed = 0;
 
     private void Update()
     {

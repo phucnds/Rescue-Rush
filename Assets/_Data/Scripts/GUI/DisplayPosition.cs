@@ -32,7 +32,7 @@ public class DisplayPosition : MonoBehaviour
     private void UpdateUI()
     {
         float PosZ = player.GetPosZ();
-        float lengthRoad = LevelManager.Instance.endPointPhase1.z;
+        float lengthRoad = LevelManager.Instance.GetLengthP1();
 
         sliderPlayer.value = Mathf.Max(PosZ, 0) / lengthRoad;
 
@@ -57,7 +57,7 @@ public class DisplayPosition : MonoBehaviour
     private void SetPosCat(List<Cat> lst)
     {
         float l = rect.rect.xMax - rect.rect.x;
-        float lengthRoad = LevelManager.Instance.endPointPhase1.z;
+        float lengthRoad = LevelManager.Instance.GetLengthP1();
 
         foreach (Cat cat in lst)
         {
